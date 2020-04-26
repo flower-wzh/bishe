@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzh.bishe.dao.ClinicDao">
+
+    <resultMap type="com.wzh.bishe.entity.Clinic" id="ClinicMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="img" column="img" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="province" column="province" jdbcType="VARCHAR"/>
+        <result property="country" column="country" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="star" column="star" jdbcType="NUMERIC"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="distance" column="distance"/>
+    </resultMap>
+
+    <resultMap type="com.wzh.bishe.entity.Clinic" id="QueryAllMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="img" column="img" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="province" column="province" jdbcType="VARCHAR"/>
+        <result property="country" column="country" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="star" column="star" jdbcType="NUMERIC"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="distance" column="distance"/>
+        <result property="location" column="location"/>
+        <result property="type" column="type"/>
+    </resultMap>
+    
+    <select id="queryAllToEs" resultMap="QueryAllMap">
+        select
+        cn.id id, cn.name name, cn.img img, cn.address address, cn.city city, cn.province province, cn.country country,
+        cn.phone phone, cn.star star, cn.latitude latitude, cn.longitude longitude ,cn.location location,
+        cg.name type
+        from clinic cn left join category cg on cn.category_id = cg.id
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="QueryAllMap">
+        select
+        cn.id id, cn.name name, cn.img img,cn.address address ,cn.city city, cn.province province, cn.country country,
+        cn.phone phone, cn.star star, cn.latitude latitude, cn.longitude longitude ,cn.location location,
+        cg.name type
+        from clinic cn left join category cg
+        on cn.category_id = cg.id
+        where cn.id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ClinicMap">
+        select
+        ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{latitude}*PI()/180-latitude*PI()/180)/2),2)+
+        COS(#{latitude}*PI()/180)*COS(latitude*PI()/180)*POW(SIN((#{longitude}*PI()/180-
+        longitude*PI()/180)/2),2)))*1000) AS distance ,
+        u.id, u.name, u.img, u.city, u.province, u.country, u.phone, u.star, u.latitude, u.longitude
+        FROM
+        clinic as u order by distance asc limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ClinicMap">
+        select
+          id, name, img, city, province, country, phone, star, latitude, longitude
+        from bishe.clinic
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="img != null and img != ''">
+                and img = #{img}
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="province != null and province != ''">
+                and province = #{province}
+            </if>
+            <if test="country != null and country != ''">
+                and country = #{country}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="star != null">
+                and star = #{star}
+            </if>
+            <if test="latitude != null and latitude != ''">
+                and latitude = #{latitude}
+            </if>
+            <if test="longitude != null and longitude != ''">
+                and longitude = #{longitude}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into bishe.clinic(name, img, address, city, province, country, phone, star, latitude, longitude)
+        values (#{name}, #{img}, #{address} #{city}, #{province}, #{country}, #{phone}, #{star}, #{latitude}, #{longitude})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update bishe.clinic
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="img != null and img != ''">
+                img = #{img},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="city != null and city != ''">
+                city = #{city},
+            </if>
+            <if test="province != null and province != ''">
+                province = #{province},
+            </if>
+            <if test="country != null and country != ''">
+                country = #{country},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="star != null">
+                star = #{star},
+            </if>
+            <if test="latitude != null and latitude != ''">
+                latitude = #{latitude},
+            </if>
+            <if test="longitude != null and longitude != ''">
+                longitude = #{longitude},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from bishe.clinic where id = #{id}
+    </delete>
+
+
+    <select id="findByLatLng" resultMap="ClinicMap">
+        select
+        ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{latitude}*PI()/180-latitude*PI()/180)/2),2)+
+        COS(#{latitude}*PI()/180)*COS(latitude*PI()/180)*POW(SIN((#{longitude}*PI()/180-
+        longitude*PI()/180)/2),2)))*1000) AS distance , u.*
+        FROM
+        clinic as u
+        having
+        distance &lt;= #{km} order by distance asc
+    </select>
+</mapper>

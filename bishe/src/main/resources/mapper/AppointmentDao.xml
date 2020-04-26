@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzh.bishe.dao.AppointmentDao">
+
+    <resultMap type="com.wzh.bishe.entity.Appointment" id="AppointmentMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="number" column="number" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="date" column="date" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="clinicId" column="clinic_id" jdbcType="VARCHAR"/>
+        <result property="sign" column="sign" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AppointmentMap">
+        select
+          id, number, status, date, user_id, clinic_id, sign
+        from bishe.appointment
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AppointmentMap">
+        select
+          id, number, status, date, user_id, clinic_id, sign
+        from bishe.appointment
+        limit #{offset}, #{limit}
+    </select>
+
+    <resultMap type="com.wzh.bishe.entity.Appointment" id="AppointmentBaseMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="number" column="number" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="date" column="date" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="clinicId" column="clinic_id" jdbcType="VARCHAR"/>
+        <result property="sign" column="sign" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findByUserId" resultMap="AppointmentBaseMap">
+        select
+          a.id id, a.number number, a.status status, a.date date ,a.user_id user_id,
+          a.clinic_id clinic_id,a.sign sign,c.phone phone
+          from bishe.appointment a left join bishe.clinic c
+          on a.clinic_id = c.id
+          <where>
+            <if test="userId != null">a.user_id = #{userId}</if>
+            <if test="flag == 'yes'">and a.status = "1" or a.status = "-1"</if>
+            <if test="flag == 'no'">and a.status = "0"</if>
+          </where>
+    </select>
+    <select id="findByClinicIdAndDate" resultMap="AppointmentMap">
+        SELECT id,number,status,date,user_id,clinic_id,sign FROM appointment WHERE  clinic_id = #{clincId} and date = curdate()
+    </select>
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update bishe.appointment
+        <set>
+            <if test="number != null and number != ''">
+                number = #{number},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="date != null">
+                date = #{date},
+            </if>
+            <if test="userId != null and userId != ''">
+                user_id = #{userId},
+            </if>
+            <if test="clinicId != null and clinicId != ''">
+                clinic_id = #{clinicId},
+            </if>
+            <if test="sign != null and sign != ''">
+                sign = #{sign},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from bishe.appointment where id = #{id}
+    </delete>
+
+</mapper>

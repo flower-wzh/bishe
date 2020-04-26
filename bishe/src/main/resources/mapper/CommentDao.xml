@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzh.bishe.dao.CommentDao">
+
+    <resultMap type="com.wzh.bishe.entity.Comment" id="CommentMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="image" column="image" jdbcType="VARCHAR"/>
+        <result property="star" column="star" jdbcType="VARCHAR"/>
+        <result property="time" column="time" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="clinicId" column="clinic_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CommentMap">
+        select
+          id, content, image, star, time, user_id, clinic_id
+        from bishe.comment
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CommentMap">
+        select
+          id, content, image, star, time, user_id, clinic_id
+        from bishe.comment
+        limit #{offset}, #{limit}
+    </select>
+
+    <resultMap type="com.wzh.bishe.entity.Comment" id="CommentBaseMap">
+        <result property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="image" column="image"/>
+        <result property="star" column="star"/>
+        <result property="time" column="time"/>
+        <result property="userId" column="user_id"/>
+        <result property="clinicId" column="clinic_id"/>
+        <association property="user" javaType="com.wzh.bishe.entity.User">
+            <result property="nickName" column="nickname"/>
+            <result property="avatarUrl" column="avatarurl"/>
+        </association>
+    </resultMap>
+    
+    <select id="queryByClinicId" resultMap="CommentBaseMap">
+        select
+          c.id id, c.content content, c.image image, c.star star, c.time time, c.clinic_id clinic_id,
+          u.nick_name nickname, u.avatar_url avatarurl
+        from comment c left join user u on c.user_id = u.id
+        where c.clinic_id = #{clinicId}
+    </select>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CommentMap">
+        select
+          id, content, image, star, time, user_id, clinic_id
+        from bishe.comment
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="image != null and image != ''">
+                and image = #{image}
+            </if>
+            <if test="star != null and star != ''">
+                and star = #{star}
+            </if>
+            <if test="time != null">
+                and time = #{time}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="clinicId != null and clinicId != ''">
+                and clinic_id = #{clinicId}
+            </if>
+        </where>
+    </select>
+
+    <select id="avgStarCount" resultType="java.lang.Double">
+        select avg(star) from comment where clinic_id = #{clinicId}
+    </select>
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id">
+        insert into bishe.comment(id,content, image, star, time, user_id, clinic_id)
+        values (#{id}, #{content}, #{image}, #{star}, #{time}, #{userId}, #{clinicId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update bishe.comment
+        <set>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="image != null and image != ''">
+                image = #{image},
+            </if>
+            <if test="star != null and star != ''">
+                star = #{star},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+            <if test="userId != null and userId != ''">
+                user_id = #{userId},
+            </if>
+            <if test="clinicId != null and clinicId != ''">
+                clinic_id = #{clinicId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from bishe.comment where id = #{id}
+    </delete>
+
+</mapper>
