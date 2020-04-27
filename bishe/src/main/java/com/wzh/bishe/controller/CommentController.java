@@ -2,10 +2,13 @@ package com.wzh.bishe.controller;
 
 import com.wzh.bishe.entity.Comment;
 import com.wzh.bishe.service.CommentService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +50,19 @@ public class CommentController {
             map.put("subject",insert);
             map.put("status",-200);
         }
+        return map;
+    }
+
+    @RequestMapping("/findAll")
+    public Map<String,Object> findAll(Integer rows, Integer page,String clinicId){
+        Map<String,Object> map = new HashMap<>();
+        List<Comment> comments = commentService.findAllComments(rows,page,clinicId);
+        Integer count = commentService.count();
+        Integer pages = count%rows==0?count/rows:count/rows+1;
+        map.put("page",page);
+        map.put("records",count);
+        map.put("total",pages);
+        map.put("rows",comments);
         return map;
     }
 

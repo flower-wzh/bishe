@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <c:set var="path">${pageContext.request.contextPath}</c:set>
 <html>
@@ -51,7 +52,7 @@
         <div>
             <!--向右对齐-->
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="javascript:void(0)">欢迎:kangbeijian</a></li>
+                <li><a href="javascript:void(0)">欢迎:${admin.username}${admin.clinicId}</a></li>
                 <li><a href="${path}/admin/logout">退出登录</a></li>
             </ul>
         </div>
@@ -62,45 +63,57 @@
         <div class="col-sm-2" style="height: 80%">
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
-<%--                    <li class="nav-item">--%>
-<%--                        <a class="nav-link" href="#ui-basic" data-toggle="collapse">--%>
-<%--                            <span class="menu-title">用户管理</span>--%>
-<%--                            <i class="menu-arrow"></i>--%>
-<%--                        </a>--%>
-<%--                        <div class="collapse" id="ui-basic">--%>
-<%--                            <ul class="nav flex-column sub-menu">--%>
-<%--                                <li class="nav-item"> <a style="color: burlywood" class="nav-link" href="javascript:$('#center').load('${path}/back/user/user.jsp')">用户列表</a></li>--%>
-<%--                                <li class="nav-item"> <a style="color: burlywood" class="nav-link" href="javascript:$('#center').load('${path}/back/user/registdistribution.jsp')">注册趋势图</a></li>--%>
-<%--                                <li class="nav-item"> <a style="color: burlywood" class="nav-link" href="javascript:$('#center').load('${path}/back/user/urbandistribution.jsp')">地理分布图</a></li>--%>
-<%--                            </ul>--%>
-<%--                        </div>--%>
-<%--                    </li>--%>
-<%--                    <li class="nav-item">--%>
-<%--                        <a class="nav-link">--%>
-<%--                            <span class="menu-title">--%>
-<%--                                <a href="javascript:$('#center').load('${path}/back/guru/guru.jsp')">诊所管理</a>--%>
-<%--                            </span>--%>
-<%--                        </a>--%>
-<%--                    </li>--%>
-                    <li class="nav-item">
-                        <a class="nav-link">
-                                            <span class="menu-title">
-                                                <a href="javascript:$('#center').load('${path}/back/album/album.jsp')">预约病人</a></span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">
+                    <shiro:hasRole name="admin">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#ui-basic" data-toggle="collapse">
+                                <span class="menu-title">用户管理</span>
+                                <i class="menu-arrow"></i>
+                            </a>
+                            <div class="collapse" id="ui-basic">
+                                <ul class="nav flex-column sub-menu">
+                                    <li class="nav-item"> <a style="color: burlywood" class="nav-link" href="javascript:$('#center').load('${path}/back/user/user.jsp')">用户列表</a></li>
+                                    <li class="nav-item"> <a style="color: burlywood" class="nav-link" href="javascript:$('#center').load('${path}/back/user/registdistribution.jsp')">注册趋势图</a></li>
+                                    <li class="nav-item"> <a style="color: burlywood" class="nav-link" href="javascript:$('#center').load('${path}/back/user/urbandistribution.jsp')">地理分布图</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">
                             <span class="menu-title">
-                                <a href="javascript:$('#center').load('${path}/back/album/album.jsp')">评论列表</a></span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">
-                            <span class="menu-title">
-                                <a href="javascript:$('#center').load('${path}/back/banner/banner.jsp')">修改信息</a>
+                                <a href="javascript:$('#center').load('${path}/back/clinic/clinic.jsp')">诊所管理</a>
                             </span>
-                        </a>
-                    </li>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">
+                            <span class="menu-title">
+                                <a href="javascript:$('#center').load('${path}/back/banner/banner.jsp')">轮播图管理</a>
+                            </span>
+                            </a>
+                        </li>
+                    </shiro:hasRole>
+                    <shiro:hasRole name="clinic">
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                            <span class="menu-title">
+                                                <a href="javascript:$('#center').load('${path}/back/patients/patients.jsp?clinicId=${admin.clinicId}')">预约病人</a></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">
+                            <span class="menu-title">
+                                <a href="javascript:$('#center').load('${path}/back/comment/comment.jsp?clinicId=${admin.clinicId}')">评论列表</a></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">
+                            <span class="menu-title">
+                                <a href="javascript:$('#center').load('${path}/back/clinic/detail.jsp?clinicId=${admin.clinicId}')">修改信息</a>
+                            </span>
+                            </a>
+                        </li>
+                    </shiro:hasRole>
+
                 </ul>
             </nav>
         </div>

@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +53,7 @@ public class ClinicController {
      */
     @GetMapping("/detail")
     public Clinic selectOne(String clinicId) {
-        return this.clinicService.queryById(clinicId);
+        return this.clinicService.findOne(clinicId);
     }
 
 
@@ -103,5 +107,24 @@ public class ClinicController {
         map.put("total",pages);
         map.put("rows",clinicList);
         return map;
+    }
+
+    @RequestMapping("changeStatus")
+    public void changeStatus(Clinic clinic){
+        clinicService.changeStatus(clinic);
+    }
+
+    @RequestMapping("modify")
+    public void update(Clinic clinic, MultipartFile file, HttpServletRequest request) throws IOException{
+        System.out.println(file);
+        if(!"".equals(file.getOriginalFilename())){
+            String realPath = request.getServletContext().getRealPath("/images");
+            System.out.println(realPath);
+            String originalFilename = file.getOriginalFilename();
+            System.out.println(originalFilename);
+            file.transferTo(new File(realPath,originalFilename));
+            clinic.setImg("../../images/"+originalFilename);
+        }
+        clinicService.modifyClinic(clinic);
     }
 }

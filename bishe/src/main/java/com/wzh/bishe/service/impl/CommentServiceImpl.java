@@ -7,6 +7,7 @@ import com.wzh.bishe.entity.Comment;
 import com.wzh.bishe.service.AppointmentService;
 import com.wzh.bishe.service.ClinicService;
 import com.wzh.bishe.service.CommentService;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -105,5 +106,16 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<Comment> findByClinicId(String clinicId) {
         return commentDao.queryByClinicId(clinicId);
+    }
+
+    @Override
+    public List<Comment> findAllComments(Integer rows, Integer page ,String clinicId) {
+        Integer offset = (page-1)*rows;
+        return commentDao.selectByRowBounds(new Comment().setClinicId(clinicId),new RowBounds(offset,rows));
+    }
+
+    @Override
+    public Integer count() {
+        return commentDao.selectCount(new Comment());
     }
 }

@@ -96,4 +96,14 @@ public class UserController {
         map.put("rows",users);
         return map;
     }
+
+    @RequestMapping("showIrritability")
+    public String showIrritability(String userId){
+        return userService.findIrritability(userId);
+    }
+
+    @RequestMapping("changeStatus")
+    public void changeStatus(User user){
+        userService.updateStatus(user);
+    }
 }

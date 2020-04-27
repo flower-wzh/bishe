@@ -112,4 +112,32 @@ public class ClinicServiceImpl implements ClinicService {
         Integer offset = (page-1)*rows;
         return clinicDao.selectByRowBounds(new Clinic(),new RowBounds(offset,rows));
     }
+
+    @Override
+    public void changeStatus(Clinic clinic) {
+        if(clinic.getStatus().equals("1")){
+            clinic.setStatus("0");
+        }else {
+            clinic.setStatus("1");
+        }
+        clinicDao.updateByPrimaryKeySelective(clinic);
+    }
+
+    @Override
+    public Clinic addClinic(Clinic clinic) {
+        clinic.setStatus("1");
+        clinicDao.insertSelective(clinic);
+        return clinic;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Clinic findOne(String clinicId) {
+        return clinicDao.selectByPrimaryKey(clinicId);
+    }
+
+    @Override
+    public void modifyClinic(Clinic clinic) {
+        clinicDao.updateByPrimaryKeySelective(clinic);
+    }
 }

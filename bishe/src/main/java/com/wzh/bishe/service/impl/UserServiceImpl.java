@@ -65,4 +65,19 @@ public class UserServiceImpl implements UserService {
     public Integer count() {
         return userDao.selectCount(new User());
     }
+
+    @Override
+    public String findIrritability(String userId) {
+        return userDao.selectIrritability(userId);
+    }
+
+    @Override
+    public void updateStatus(User user) {
+        if(user.getStatus().equals("1")){
+            user.setStatus("0");
+        }else {
+            user.setStatus("1");
+        }
+        userDao.updateByPrimaryKeySelective(user);
+    }
 }

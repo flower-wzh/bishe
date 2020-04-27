@@ -1,6 +1,7 @@
 package com.wzh.bishe.service;
 
 import com.wzh.bishe.entity.Comment;
+
 import java.util.List;
 
 /**
@@ -59,4 +60,8 @@ public interface CommentService {
      * @return 评论信息
      */
     List<Comment> findByClinicId(String clinicId);
+
+    List<Comment> findAllComments(Integer rows, Integer page,String clinicId);
+
+    Integer count();
 }

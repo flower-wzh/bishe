@@ -51,7 +51,7 @@
                                       dataType:'text',
                                       success:function (data) {
                                           console.log(data)
-                                          if(data == '"success"'){
+                                          if(data == 'success'){
                                              location.href = '${path}/back/index.jsp'
                                           }else {
                                             $('#error').html(data);

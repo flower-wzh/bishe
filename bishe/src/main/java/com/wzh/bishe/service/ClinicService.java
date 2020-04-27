@@ -72,4 +72,12 @@ public interface ClinicService {
     Integer count();
 
     List<Clinic> findAllClinic(Integer rows, Integer page);
+
+    void changeStatus(Clinic clinic);
+
+    Clinic addClinic(Clinic clinic);
+
+    Clinic findOne(String clinicId);
+
+    void modifyClinic(Clinic clinic);
 }

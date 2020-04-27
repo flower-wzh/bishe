@@ -41,5 +41,8 @@ public class User implements Serializable {
     
     private Date loginTime;
 
+    private String irritability;
+
+    private String status;
 
 }

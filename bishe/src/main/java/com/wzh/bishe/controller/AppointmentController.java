@@ -74,4 +74,10 @@ public class AppointmentController {
         return map;
     }
 
+    @RequestMapping("changeStatus")
+    public void changeStatus(Appointment appointment){
+        appointment.setStatus("6");
+        appointmentService.update(appointment);
+    }
+
 }

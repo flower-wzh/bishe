@@ -2,7 +2,7 @@ spring:
   jackson:
     default-property-inclusion: non_null
   datasource:
-    url: jdbc:mysql://localhost:3306/bishe?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://123.56.65.239:3306/bishe?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: root
     type: com.alibaba.druid.pool.DruidDataSource

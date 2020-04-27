@@ -13,7 +13,7 @@
                 {name:'gender',align:'center',editable:true},
                 {name:'city',align:'center',editable:true},
                 {name:'loginTime',align:'center',editable:true},
-                {name:'gender',align:'center',editable:true,formatter:function (data) {
+                {name:'status',align:'center',editable:true,formatter:function (data) {
                         if(data == 1){
                             return "使用";
                         }
@@ -29,6 +29,8 @@
             viewrecords:true,
             mtype : "post",
             caption:'用户列表',
+            width:'100%',
+            height:'100%',
             autowidth:true,
             multiselect:true
         }).navGrid('#pager',

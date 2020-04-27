@@ -67,4 +67,10 @@ public class Clinic implements Serializable {
 
     private String address;
 
+    @Transient
+    private String status;
+
+    @Transient
+    private String categoryId;
+
 }

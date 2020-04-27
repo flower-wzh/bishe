@@ -20,4 +20,8 @@ public interface UserService {
     List<User> findAllUser(Integer rows, Integer page);
 
     Integer count();
+
+    String findIrritability(String userId);
+
+    void updateStatus(User user);
 }

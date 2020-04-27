@@ -2,6 +2,8 @@ package com.wzh.bishe.dao;
 
 import com.wzh.bishe.entity.Comment;
 import org.apache.ibatis.annotations.Param;
+import tk.mybatis.mapper.common.Mapper;
+
 import java.util.List;
 
 /**
@@ -10,7 +12,7 @@ import java.util.List;
  * @author makejava
  * @since 2020-03-19 15:12:06
  */
-public interface CommentDao {
+public interface CommentDao extends Mapper<Comment> {
 
     /**
      * 通过ID查询单条数据
