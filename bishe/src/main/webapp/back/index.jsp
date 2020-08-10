@@ -20,34 +20,14 @@
     <script type="text/javascript" src="${path}/static/editor/kindeditor-all-min.js" ></script>
     <script type="text/javascript" src="${path}/static/editor/lang/zh-CN.js" ></script>
     <link rel="stylesheet" href="${path}/static/editor/themes/default/default.css" />
-    <script type="text/javascript" src="https://cdn.goeasy.io/goeasy-1.0.3.js"></script>
-    <script>
-        var goEasy = new GoEasy({
-            host:'hangzhou.goeasy.io', //应用所在的区域地址: 【hangzhou.goeasy.io |singapore.goeasy.io】
-            appkey: "BC-4e21fe5847ed4e04b61cfbe1999b2eba", //替换为您的应用appkey
-        });
-    </script>
-    <title>诊所预约系统后台</title>
-    <script>
-        KindEditor.ready(function (K) {
-            K.create("#editor_id", {
-                filePostName: 'uploadFile',
-                uploadJson: '${path}/article/upload',
-                allowFileManager: true,
-                fileManagerJson: '${path}/article/files',
-                afterBlur: function () {
-                    this.sync();
-                }
-            })
-        });
 
-    </script>
+    <title>诊所预约系统后台</title>
 </head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">诊所预约系统后台</a>
+            <a class="navbar-brand" href="#">诊所预约系统后台 ${login}</a>
         </div>
         <div>
             <!--向右对齐-->
@@ -163,83 +143,44 @@
     <h4 align="center">@yxwangzhenhua@163.com</h4>
 </div>
 </body>
-<div class="modal fade" id="kind" role="dialog">
+<div class="modal fade" id="addBingLi" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content" style="width: 750px;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">文章信息</h4>
+                <h4 class="modal-title" id="myModalLabel">病例详情</h4>
             </div>
             <div class="modal-body">
-                <form role="form" id="kindfrm" method="post" class="form-horizontal">
+                <form id="case_data">
                     <div class="form-group">
-                        <input type="hidden" name="id" id="id" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-1 control-label">标题</label>
-                        <div class="col-sm-5">
-                            <input type="text" name="title" id="title" placeholder="请输入标题" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-1 control-label">封面</label>
-                        <div class="col-sm-5">
-                            <input type="file" name="file" id="file">
-                        </div>
-                    </div>
-                    <script>
-                        $(function () {
-                            //渲染上师数据
-                            $.ajax({
-                               url:'${path}/guru/all',
-                               datatype:'JSON',
-                               type:'GET',
-                               success:function (data) {
-                                   console.log(data);
-                                   var option = "<option value='0'>通用文章</option>";
-                                   $.each(data,function (i,v) {
-                                       option += "<option value='"+v.id+"'>"+v.nickName+"</option>"
-                                   })
-                                   $('#guru').html(option);
-                               },
-                                complete : function(xhr, status) {
-                                    //拦截器拦截没有权限跳转
-                                    // 通过xhr取得响应头
-                                    var REDIRECT = xhr.getResponseHeader("REDIRECT");
-                                    //如果响应头中包含 REDIRECT 则说明是拦截器返回的
-                                    if (REDIRECT == "REDIRECT")
-                                    {
-                                        document.location.href = xhr.getResponseHeader("CONTEXTPATH");
-                                    }
-                                }
-                            });
-                        })
-                    </script>
-                    <div class="form-group">
-                        <label class="col-sm-1 control-label">上师</label>
-                        <div class="col-sm-5">
-                            <select class="form-control" name="guruId" id="guru">
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-1 control-label">状态</label>
-                        <div class="col-sm-5">
-                            <select class="form-control" name="status" id="status">
-                                <option value="使用">使用</option>
-                                <option value="未使用">未使用</option>
-                            </select>
-                        </div>
+                        <input type="hidden" name="appointmentId" id="app_id" class="form-control">
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <textarea id="editor_id" name="content" style="width:700px;height:300px;"></textarea>
+                            病例描述：
+                            <textarea id="app_description" name="description" style="width:700px;height:300px;"></textarea>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer" id="modal_foot"></div>
+            <script>
+                $(function () {
+                   $('#sub').on('click',function () {
+                       $.ajax({
+                           url: '${path}/case/addCase',
+                           type: 'POST',
+                           data: $('#case_data').serialize(),
+                           success: function (result) {
+                               alert("添加成功");
+                           }
+                       })
+                   })
+                });
+            </script>
+            <div class="modal-footer" id="modal_foot">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="sub">提交</button>
+            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>

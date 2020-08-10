@@ -1,9 +1,9 @@
 package com.wzh.bishe.service;
 
-import com.wzh.bishe.entity.Case;
+import com.wzh.bishe.entity.Cases;
 
 public interface CaseService {
 
-    Case addCase(Case c);
-    Case findOneByAppointmentId(String appointmentId);
+    Cases addCase(Cases c);
+    Cases findOneByAppointmentId(String appointmentId);
 }

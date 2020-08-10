@@ -106,9 +106,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> findAllAppointment(Integer rows, Integer page) {
+    public List<Appointment> findAllAppointment(Integer rows, Integer page ,String clinicId) {
         Integer offset = (page-1)*rows;
-        return appointmentDao.selectByRowBounds(new Appointment(),new RowBounds(offset,rows));
+        return appointmentDao.selectByRowBounds(new Appointment().setClinicId(clinicId),new RowBounds(offset,rows));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.wzh.bishe.controller;
 
-import com.wzh.bishe.entity.Case;
+import com.wzh.bishe.entity.Cases;
 import com.wzh.bishe.service.CaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +14,12 @@ public class CaseController {
     private CaseService caseService;
 
     @RequestMapping("addCase")
-    private Case addCase(Case c){
+    private Cases addCase(Cases c){
         return caseService.addCase(c);
     }
 
     @RequestMapping("findOneCase")
-    private Case findByAppointmentId(String appointmentId){
+    private Cases findByAppointmentId(String appointmentId){
         return caseService.findOneByAppointmentId(appointmentId);
 
     }

@@ -12,12 +12,12 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class Case implements Serializable {
+public class Banner implements Serializable {
 
     @Id
     private String id;
-
-    private String description;
-
-    private String appointmentId;
+    private String title;
+    private String href;
+    private String url;
+    private String status;
 }

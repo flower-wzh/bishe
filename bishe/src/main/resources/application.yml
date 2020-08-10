@@ -20,6 +20,10 @@ spring:
     view:
       suffix: .jsp
       prefix: /
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 mybatis:
   mapper-locations: classpath:/mapper/*Dao.xml
   typeAliasesPackage: com.wzh.bishe.entity

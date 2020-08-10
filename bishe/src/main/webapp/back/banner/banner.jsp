@@ -21,7 +21,7 @@
                 url:'${path}/banner/findAll',
                 datatype:'json',
                 mtype:'get',
-                colNames:["编号","标题","图片","链接","创建日期","描述","状态"],
+                colNames:["编号","标题","图片","链接","状态"],
                 colModel:[
                     {name:'id',align:'center',search:false,hidden:true,height:200},
                     {name:'title',align:'center',editable:true,height:200},
@@ -29,8 +29,6 @@
                         return "<img style='width: 100%' src='"+data+"'>";
                         }},
                     {name:'href',align:'center',editable:true,height:200},
-                    {name:'createDate',align:'center',height:200},
-                    {name:'description',align:'center',editable:true,search:false,height:200},
                     {name:'status',align:'center',height:200,editable:true,formatter:function (data) {
                             if(data == 1){
                                 return "使用";
@@ -46,7 +44,8 @@
                 caption:'轮播图',
                 editurl:'${path}/banner/edit',
                 autowidth:true,
-                height: 400,
+                width:'100%',
+                height: '100%',
                 multiselect:true
             }).navGrid('#pager',
                 {edittext:"编辑",addtext:"添加",deltext:"删除"},   //参数2:开启工具栏编辑按钮
@@ -73,36 +72,7 @@
         <div class="col-sm-12">
             <ul class="nav nav-tabs">
                 <li class="active"><a>轮播图列表</a></li>
-                <li><a href="javascript:void(0);" onclick="outPoi()">导出轮播图信息</a></li>
-                <li><a href="javascript:void(0);" onclick="outPoiModel()">导出轮播图模板</a></li>
-                <li><a href="javascript:void(0);" onclick="showMessage()">导入轮播图信息</a></li>
             </ul>
-            <script>
-                function outPoi() {
-                    location.href = "${path}/banner/out";
-                }
-
-                function outPoiModel() {
-                    location.href = "${path}/banner/outModel";
-                }
-
-                function showMessage() {
-                    $("#form")[0].reset();
-                    $("#kind").modal("show");
-                }
-                
-                function inputMessage() {
-                    $.ajaxFileUpload({
-                        url:"${path}/banner/input",
-                        type:"post",
-                        datatype:"text",
-                        fileElementId:"file",
-                        success:function (data) {
-                            $("#kind").modal("hide");
-                        }
-                    })
-                }
-            </script>
             <div class="panel">
                 <table id="banners"></table>
                 <div id="pager" style="height:30px">

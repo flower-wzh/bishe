@@ -71,7 +71,7 @@ public interface AppointmentService {
      */
     List<Appointment> findByUserId(String userId ,String flag);
 
-    List<Appointment> findAllAppointment(Integer rows, Integer page);
+    List<Appointment> findAllAppointment(Integer rows, Integer page ,String clinicId);
 
     Integer count();
 }

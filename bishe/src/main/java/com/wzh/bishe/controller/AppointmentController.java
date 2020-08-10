@@ -62,9 +62,9 @@ public class AppointmentController {
 
     @RequestMapping("/findAll")
     @ResponseBody
-    public Map<String,Object> findAll(Integer rows, Integer page){
+    public Map<String,Object> findAll(Integer rows, Integer page,String clinicId){
         Map<String,Object> map = new HashMap<>();
-        List<Appointment> appointmentList = appointmentService.findAllAppointment(rows,page);
+        List<Appointment> appointmentList = appointmentService.findAllAppointment(rows,page,clinicId);
         Integer count = appointmentService.count();
         Integer pages = count%rows==0?count/rows:count/rows+1;
         map.put("page",page);

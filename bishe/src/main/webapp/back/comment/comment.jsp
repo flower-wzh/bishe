@@ -3,7 +3,7 @@
     $(function () {
         $('#comment').jqGrid({
             styleUI:'Bootstrap',
-            url:'${path}/comment/findAll?clinicId='+'01',
+            url:'${path}/comment/findAll?clinicId=${admin.clinicId}',
             datatype:'json',
             mtype:'get',
             colNames : [ '评论人', '内容','评分',"时间" ],

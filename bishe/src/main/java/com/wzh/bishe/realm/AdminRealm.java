@@ -29,7 +29,7 @@ public class AdminRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        Object primaryPrincipal = principalCollection.getPrimaryPrincipal();
+        Admin primaryPrincipal = (Admin) principalCollection.getPrimaryPrincipal();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         /**
          * 从数据库获取当前对象信息
@@ -37,7 +37,7 @@ public class AdminRealm extends AuthorizingRealm {
         /**
          * 拿到当前admin对象去数据库五表连查权限
          */
-        Admin permissionByUsername = adminService.findPermissionByUsername(primaryPrincipal.toString());
+        Admin permissionByUsername = adminService.findPermissionByUsername(primaryPrincipal.getUsername());
         /**
          * 添加角色权限
          */
@@ -78,7 +78,7 @@ public class AdminRealm extends AuthorizingRealm {
         ByteSource bytes = ByteSource.Util.bytes(login.getSalt());
         System.out.println(login.getPassword());
 
-        return new SimpleAuthenticationInfo(username,login.getPassword(),bytes,getName());
+        return new SimpleAuthenticationInfo(login,login.getPassword(),bytes,getName());
     }
 
     public static void main(String[] args) {

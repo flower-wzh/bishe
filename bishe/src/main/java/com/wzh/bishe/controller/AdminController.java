@@ -29,7 +29,9 @@ public class AdminController {
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
-            //session.setAttribute("admin",admin);
+            Admin login = (Admin) subject.getPrincipal();
+            System.out.println(login);
+            session.setAttribute("admin",login);
         } catch (AuthenticationException e) {
             e.printStackTrace();
             return "登录失败";

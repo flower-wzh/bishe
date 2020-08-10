@@ -3,7 +3,7 @@
     $(function () {
         $('#patients').jqGrid({
             styleUI:'Bootstrap',
-            url:'${path}/appointment/findAll?clinicId='+'01',
+            url:'${path}/appointment/findAll?clinicId=${admin.clinicId}',
             datatype:'json',
             mtype:'get',
             colNames : [ '编号', '预约人','预约时间',"状态","操作" ],
@@ -19,10 +19,10 @@
                         }
                         return "暂未赴约";
                     }},
-                {name : "option",align : "center",formatter:function(data) {
+                {name : "option",align : "center",formatter:function(cellvalue, options, rowObject) {
                         var result = "";
-                        result += "<button  href='javascript:void(0)' onclick=\"weiyue('" + data + "')\" class='btn btn-primary' title='违约'>违约</button >";
-                        result += "<button href='javascript:void(0)' onclick=\"bingli('" + data + "')\" class='btn btn-primary' title='填写病例'>填写病例</button>";
+                        result += "<button  href='javascript:void(0)' onclick=\"weiyue('" + rowObject.id + "')\" class='btn btn-primary' title='违约'>违约</button >";
+                        result += "<button href='javascript:void(0)' onclick=\"bingli('" + rowObject.id + "')\" class='btn btn-primary' title='填写病例'>填写病例</button>";
                         return result;
                     }},
             ],
@@ -34,8 +34,7 @@
             caption:'预约病人表',
             width:'100%',
             height:'100%',
-            autowidth:true,
-            multiselect:true
+            autowidth:true
         }).navGrid('#pager',
             {
                 sopt:['eq','ne','cn']
@@ -43,7 +42,7 @@
         );
     });
 
-    function weiyue() {
+    function weiyue(id) {
         $.ajax({
             url:'${path}/appointment/changeStatus',
             type:'GET',
@@ -53,13 +52,24 @@
                 status:status
             },
             success:function () {
-                $("#users").trigger("reloadGrid");
+                $("#patients").trigger("reloadGrid");
             }
         })
     }
 
-    function bingli() {
-
+    function bingli(id) {
+        var data = $("#patients").jqGrid("getRowData",id);
+        console.log(data.id);
+        $('#app_id').val(data.id);
+        $.ajax({
+            url:'${path}/case/findOneCase?appointmentId='+id,
+            type:'GET',
+            dateType:'JSON',
+            success: function (result) {
+                $('#app_description').val(result.description);
+            }
+        })
+        $('#addBingLi').modal('show');
     }
 
 </script>

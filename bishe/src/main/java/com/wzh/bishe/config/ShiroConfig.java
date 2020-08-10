@@ -33,10 +33,9 @@ public class ShiroConfig {
          * 过滤的map
          */
         Map<String,String> map = new LinkedHashMap<>();
-        map.put("/back/login.jsp","anon");
         map.put("/back/regist.jsp","anon");
         map.put("/admin/logout","logout");
-        map.put("/admin/login", "authc");
+        map.put("/admin/login", "anon");
         map.put("/back/**","authc");
         map.put("/back/index.jsp","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
@@ -44,7 +43,7 @@ public class ShiroConfig {
          *设置没有登录认证的重定向
          */
         shiroFilterFactoryBean.setLoginUrl("/back/login.jsp");
-        shiroFilterFactoryBean.setLoginUrl("/admin/login");
+
         /**
          * 设置没有权限的重定向
          */
